@@ -29,22 +29,28 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Product
 
-- id
-- name
-- price
-- [OPTIONAL] category
+| Column   | Data Type    |
+| -------- | ------------ |
+| id       | INTEGER      |
+| name     | VARCHAR(50)  |
+| price    | REAL         |
+| category | VARCHAR(250) |
 
 #### User
 
-- id
-- firstName
-- lastName
-- password
+| Column     | Data Type    |
+| ---------- | ------------ |
+| id         | INTEGER      |
+| first_name | VARCHAR(50)  |
+| last_name  | VARCHAR(50)  |
+| password   | VARCHAR(250) |
 
 #### Orders
 
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+| Column       | Data Type |
+| ------------ | --------- |
+| id           | INTEGER   |
+| product_id   | INTEGER   |
+| qty          | INTEGER   |
+| user_id      | INTEGER   |
+| is_completed | BOOLEAN   |
