@@ -3,9 +3,19 @@ version: '3.9'
 services:
   postgres:
     image: postgres
+    build:
+      context: .
+      dockerfile: db.Dockerfile
     ports:
       - '5432:5432'
-    env_file:
-      - .env
+    environment:
+      - POSTGRES_PASSWORD=postgres
     volumes:
       - './db:/var/lib/postgresql/data'
+    container_name: db_0
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
