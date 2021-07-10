@@ -2,7 +2,7 @@ import {
   DisplayProcessor,
   SpecReporter,
   StacktraceOption,
-} from "jasmine-spec-reporter";
+} from 'jasmine-spec-reporter';
 import CustomReporter = jasmine.CustomReporter;
 import JasmineStartedInfo = jasmine.JasmineStartedInfo;
 

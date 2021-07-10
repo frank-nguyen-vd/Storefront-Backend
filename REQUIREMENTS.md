@@ -45,7 +45,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 | last_name  | VARCHAR(50)  |
 | password   | VARCHAR(250) |
 
-#### Orders
+#### Order
 
 | Column       | Data Type |
 | ------------ | --------- |
