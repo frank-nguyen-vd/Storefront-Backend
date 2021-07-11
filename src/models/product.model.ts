@@ -1,10 +1,10 @@
 import Client from '../database';
 
 export interface ProductType {
-  id: Number;
-  name: String;
-  price: Number;
-  category: String;
+  id: number;
+  name: string;
+  price: number;
+  category: string;
 }
 
 export class Product {
