@@ -2,6 +2,7 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json';
 import productsController from './controllers/products.controller';
+import usersController from './controllers/users.controller';
 
 const app = express();
 export default app;
@@ -17,6 +18,7 @@ app.get('/api', (req, res) => {
 });
 
 app.use('/api/products', productsController);
+app.use('/api/users', usersController);
 
 // eslint-disable-next-line no-console
 app.listen(port, () => console.log(`Listening on port ${port}!`));
