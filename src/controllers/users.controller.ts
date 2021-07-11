@@ -4,6 +4,8 @@ import {
   createErrMsg,
   createSuccessMsg,
 } from '../services/response-template.service';
+import { authenticate } from '../services/authentication.service';
+import { SALT_ROUNDS, PEPPER } from '../keys';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 
@@ -11,15 +13,20 @@ dotenv.config();
 
 const router = express.Router();
 
-router.get('/', async (req: express.Request, res: express.Response): Promise<
-  express.Response | undefined
-> => {
-  const results = await User.index();
-  return res.status(200).json({
-    statusCode: 200,
-    data: results,
-  });
-});
+router.get(
+  '/',
+  authenticate,
+  async (
+    req: express.Request,
+    res: express.Response,
+  ): Promise<express.Response | undefined> => {
+    const results = await User.index();
+    return res.status(200).json({
+      statusCode: 200,
+      data: results,
+    });
+  },
+);
 
 router.post('/', async (req: express.Request, res: express.Response): Promise<
   express.Response | undefined
@@ -42,8 +49,8 @@ router.post('/', async (req: express.Request, res: express.Response): Promise<
   if (User.findOne({ username }))
     return res.status(400).send(createErrMsg(400, 'User exists'));
 
-  const pepper = process.env.Pepper ?? 'secret';
-  const salt = parseInt(process.env.SaltRounds ?? '10', 10);
+  const pepper = process.env.Pepper ?? PEPPER;
+  const salt = parseInt(process.env.SaltRounds ?? SALT_ROUNDS, 10);
   const hashedPwd = await bcrypt.hash(password + pepper, salt);
 
   const result = await User.create({
