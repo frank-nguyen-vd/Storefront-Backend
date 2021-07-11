@@ -4,6 +4,10 @@ import {
   createErrMsg,
   createSuccessMsg,
 } from '../services/response-template.service';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -35,12 +39,18 @@ router.post('/', async (req: express.Request, res: express.Response): Promise<
     return res.status(400).send(createErrMsg(400, 'Missing username'));
   if (!password)
     return res.status(400).send(createErrMsg(400, 'Missing password'));
+  if (User.findOne({ username }))
+    return res.status(400).send(createErrMsg(400, 'User exists'));
+
+  const pepper = process.env.Pepper ?? 'secret';
+  const salt = parseInt(process.env.SaltRounds ?? '10', 10);
+  const hashedPwd = await bcrypt.hash(password + pepper, salt);
 
   const result = await User.create({
     first_name,
     last_name,
     username,
-    password,
+    password: hashedPwd,
   });
 
   return res.status(200).send(createSuccessMsg(200, result));
