@@ -16,7 +16,7 @@ export class Product {
       conn.release();
       return result.rows;
     } catch (err) {
-      throw new Error(`Cannot get product ${err}`);
+      throw new Error(`Cannot get products ${err}`);
     }
   }
 
