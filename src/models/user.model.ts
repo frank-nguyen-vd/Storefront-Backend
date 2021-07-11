@@ -2,10 +2,10 @@ import Client from '../database';
 
 export interface UserType {
   id?: number;
-  first_name: string;
-  last_name: string;
-  username: string;
-  password: string;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  password?: string;
 }
 
 export class User {
@@ -55,6 +55,16 @@ export class User {
       conn.release();
 
       return result.rows;
+    } catch (err) {
+      throw new Error(`Cannot find user ${err}`);
+    }
+  }
+
+  static async findOne(data: UserType): Promise<UserType> {
+    try {
+      const result = await this.find(data);
+      if (result === []) return {};
+      return result[0];
     } catch (err) {
       throw new Error(`Cannot find user ${err}`);
     }
