@@ -5,62 +5,113 @@ import {
   createSuccessMsg,
 } from '../services/response-template.service';
 import { authenticate } from '../services/authentication.service';
-import { SALT_ROUNDS, PEPPER } from '../keys';
+import { SALT_ROUNDS, PEPPER, TOKEN_SECRET } from '../keys';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
 const router = express.Router();
+const pepper = process.env.PEPPER ?? PEPPER;
+const salt = parseInt(process.env.SALT_ROUNDS ?? SALT_ROUNDS, 10);
+const tokenSecret = process.env.TOKEN_SECRET ?? TOKEN_SECRET;
 
 router.get(
   '/',
   authenticate,
-  async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<express.Response | undefined> => {
+  async (req: express.Request, res: express.Response): Promise<void> => {
     const results = await User.index();
-    return res.status(200).json({
+    res.status(200).json({
       statusCode: 200,
       data: results,
     });
   },
 );
 
-router.post('/', async (req: express.Request, res: express.Response): Promise<
-  express.Response | undefined
-> => {
-  if (req.body === {}) {
-    return res
-      .status(400)
-      .send(createErrMsg(400, 'Missing information of the new user'));
-  }
-  const { first_name, last_name, username, password } = req.body;
+router.post(
+  '/',
+  async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+      if (req.body === {}) {
+        res
+          .status(400)
+          .send(createErrMsg(400, 'Missing information of the new user'));
+        return;
+      }
+      const { first_name, last_name, username, password } = req.body;
 
-  if (!first_name)
-    return res.status(400).send(createErrMsg(400, 'Missing user first name'));
-  if (!last_name)
-    return res.status(400).send(createErrMsg(400, 'Missing user last name'));
-  if (!username)
-    return res.status(400).send(createErrMsg(400, 'Missing username'));
-  if (!password)
-    return res.status(400).send(createErrMsg(400, 'Missing password'));
-  if (User.findOne({ username }))
-    return res.status(400).send(createErrMsg(400, 'User exists'));
+      if (!first_name) {
+        res.status(400).send(createErrMsg(400, 'Missing user first name'));
+        return;
+      }
+      if (!last_name) {
+        res.status(400).send(createErrMsg(400, 'Missing user last name'));
+        return;
+      }
+      if (!username) {
+        res.status(400).send(createErrMsg(400, 'Missing username'));
+        return;
+      }
+      if (!password) {
+        res.status(400).send(createErrMsg(400, 'Missing password'));
+        return;
+      }
+      const user = await User.findOne({ username });
+      if (user !== undefined) {
+        res.status(400).send(createErrMsg(400, 'User exists'));
+        return;
+      }
 
-  const pepper = process.env.Pepper ?? PEPPER;
-  const salt = parseInt(process.env.SaltRounds ?? SALT_ROUNDS, 10);
-  const hashedPwd = await bcrypt.hash(password + pepper, salt);
+      const hashedPwd = await bcrypt.hash(password + pepper, salt);
 
-  const result = await User.create({
-    first_name,
-    last_name,
-    username,
-    password: hashedPwd,
-  });
+      const result = await User.create({
+        first_name,
+        last_name,
+        username,
+        password: hashedPwd,
+      });
 
-  return res.status(200).send(createSuccessMsg(200, result));
-});
+      res.status(200).send(createSuccessMsg(200, result));
+    } catch (err) {
+      res.status(500).send(createErrMsg(500, 'Internal Server Error'));
+    }
+  },
+);
+
+router.post(
+  '/login',
+
+  async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+      const { username, password } = req.body;
+
+      if (username === undefined || password === undefined) {
+        res.status(400).send(createErrMsg(400, 'Missing username or password'));
+        return;
+      }
+      const user = await User.findOne({ username });
+      if (
+        user === undefined ||
+        user.password === undefined ||
+        !bcrypt.compareSync(password + pepper, user.password)
+      ) {
+        res.status(404).send(createErrMsg(404, 'Invalid username or password'));
+        return;
+      }
+
+      const token = jwt.sign(
+        {
+          username,
+        },
+        tokenSecret,
+        { expiresIn: '1800s' },
+      );
+      res.status(200).send(createSuccessMsg(200, token));
+    } catch (err) {
+      res.status(500).send(createErrMsg(500, 'Internal Server Error'));
+    }
+  },
+);
 
 export default router;
