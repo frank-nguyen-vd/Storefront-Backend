@@ -17,7 +17,7 @@ export class User {
       conn.release();
       return result.rows;
     } catch (err) {
-      throw new Error(`Cannot get users ${err}`);
+      throw new Error(`Cannot retrieve user. Error: ${err}`);
     }
   }
 
@@ -36,7 +36,7 @@ export class User {
       conn.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Cannot create user ${err}`);
+      throw new Error(`Cannot create user. Error: ${err}`);
     }
   }
 
@@ -56,7 +56,7 @@ export class User {
 
       return result.rows;
     } catch (err) {
-      throw new Error(`Cannot find user ${err}`);
+      throw new Error(`Cannot find user. Error: ${err}`);
     }
   }
 
@@ -70,7 +70,7 @@ export class User {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Cannot find user ${err}`);
+      throw new Error(`Cannot find user. Error: ${err}`);
     }
   }
 
@@ -80,7 +80,7 @@ export class User {
       if (result === []) return {};
       return result[0];
     } catch (err) {
-      throw new Error(`Cannot find user ${err}`);
+      throw new Error(`Cannot find user. Error: ${err}`);
     }
   }
 
@@ -97,7 +97,7 @@ export class User {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Cannot find user ${err}`);
+      throw new Error(`Cannot update user. Error: ${err}`);
     }
   }
 
@@ -110,7 +110,7 @@ export class User {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Cannot find user ${err}`);
+      throw new Error(`Cannot delete user. Error: ${err}`);
     }
   }
 }
