@@ -16,7 +16,7 @@ export class Product {
       conn.release();
       return result.rows;
     } catch (err) {
-      throw new Error(`Cannot get products ${err}`);
+      throw new Error(`Cannot list products ${err}`);
     }
   }
 
@@ -44,12 +44,26 @@ export class Product {
       if (price) conditions += `last_name = '${price}',`;
       if (category) conditions += `username = '${category}',`;
       if (conditions.slice(-1) === ',') conditions = conditions.slice(0, -1);
-      const sql = `SELECT * FROM users WHERE ${conditions}`;
+      const sql = `SELECT * FROM products WHERE ${conditions}`;
 
       const result = await conn.query(sql);
       conn.release();
 
       return result.rows;
+    } catch (err) {
+      throw new Error(`Cannot find product. Error: ${err}`);
+    }
+  }
+
+  static async findById(id: number): Promise<ProductType> {
+    try {
+      const conn = await Client.connect();
+      const sql = `SELECT * FROM products WHERE id=${id}`;
+
+      const result = await conn.query(sql);
+      conn.release();
+
+      return result.rows[0];
     } catch (err) {
       throw new Error(`Cannot find product. Error: ${err}`);
     }
