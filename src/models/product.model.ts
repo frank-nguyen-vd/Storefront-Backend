@@ -68,4 +68,14 @@ export class Product {
       throw new Error(`Cannot find product. Error: ${err}`);
     }
   }
+
+  static async findOne(data: ProductType): Promise<ProductType> {
+    try {
+      const result = await this.find(data);
+      if (result === []) return {};
+      return result[0];
+    } catch (err) {
+      throw new Error(`Cannot find product. Error: ${err}`);
+    }
+  }
 }
