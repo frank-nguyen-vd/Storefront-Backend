@@ -96,7 +96,7 @@ router.post(
         user.password === undefined ||
         !bcrypt.compareSync(password + pepper, user.password)
       ) {
-        res.status(404).send(createErrMsg(404, 'Invalid username or password'));
+        res.status(400).send(createErrMsg(400, 'Invalid username or password'));
         return;
       }
 
@@ -134,7 +134,7 @@ router.patch(
       const id = parseInt(req.params.id);
       const user: UserType = await User.findById(id);
       if (user === undefined) {
-        res.status(400).send(createErrMsg(400, 'User not found'));
+        res.status(404).send(createErrMsg(404, 'User not found'));
         return;
       }
       const { first_name, last_name } = req.body;
@@ -146,6 +146,24 @@ router.patch(
       }
 
       const result = await User.update(user);
+      res.status(200).send(createSuccessMsg(200, result));
+    } catch {
+      res.status(500).send(createErrMsg(500, 'Internal Server Error'));
+    }
+  },
+);
+
+router.delete(
+  '/:id',
+  async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+      const id = parseInt(req.params.id);
+      const user: UserType = await User.findById(id);
+      if (user === undefined) {
+        res.status(404).send(createErrMsg(404, 'User not found'));
+        return;
+      }
+      const result = await User.deleteById(id);
       res.status(200).send(createSuccessMsg(200, result));
     } catch {
       res.status(500).send(createErrMsg(500, 'Internal Server Error'));

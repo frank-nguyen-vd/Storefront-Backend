@@ -100,4 +100,17 @@ export class User {
       throw new Error(`Cannot find user ${err}`);
     }
   }
+
+  static async deleteById(id: number): Promise<UserType> {
+    try {
+      const conn = await Client.connect();
+      const sql = `DELETE FROM users WHERE id = ${id} RETURNING *`;
+      const result = await conn.query(sql);
+      conn.release();
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Cannot find user ${err}`);
+    }
+  }
 }
