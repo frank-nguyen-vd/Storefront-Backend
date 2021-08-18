@@ -78,4 +78,22 @@ export class Product {
       throw new Error(`Cannot find product. Error: ${err}`);
     }
   }
+
+  static async update(data: ProductType): Promise<ProductType> {
+    try {
+      const conn = await Client.connect();
+      const sql = `UPDATE products SET name = $1, price = $2, category = $3 WHERE id = $4 RETURNING *`;
+      const result = await conn.query(sql, [
+        data.name,
+        data.price,
+        data.category,
+        data.id,
+      ]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Cannot update product. Error: ${err}`);
+    }
+  }
 }
