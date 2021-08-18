@@ -1,5 +1,5 @@
 import express from 'express';
-import { User } from '../models/user.model';
+import { User, UserType } from '../models/user.model';
 import {
   createErrMsg,
   createSuccessMsg,
@@ -120,6 +120,32 @@ router.get(
     try {
       const id = parseInt(req.params.id);
       const result = await User.findById(id);
+      res.status(200).send(createSuccessMsg(200, result));
+    } catch {
+      res.status(500).send(createErrMsg(500, 'Internal Server Error'));
+    }
+  },
+);
+
+router.patch(
+  '/:id',
+  async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+      const id = parseInt(req.params.id);
+      const user: UserType = await User.findById(id);
+      if (user === undefined) {
+        res.status(400).send(createErrMsg(400, 'User not found'));
+        return;
+      }
+      const { first_name, last_name } = req.body;
+      if (first_name) {
+        user.first_name = first_name;
+      }
+      if (last_name) {
+        user.last_name = last_name;
+      }
+
+      const result = await User.update(user);
       res.status(200).send(createSuccessMsg(200, result));
     } catch {
       res.status(500).send(createErrMsg(500, 'Internal Server Error'));

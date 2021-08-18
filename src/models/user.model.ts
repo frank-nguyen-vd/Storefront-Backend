@@ -60,7 +60,7 @@ export class User {
     }
   }
 
-  static async findById(id: number): Promise<UserType[]> {
+  static async findById(id: number): Promise<UserType> {
     try {
       const conn = await Client.connect();
       const sql = `SELECT * FROM users WHERE id=${id}`;
@@ -79,6 +79,23 @@ export class User {
       const result = await this.find(data);
       if (result === []) return {};
       return result[0];
+    } catch (err) {
+      throw new Error(`Cannot find user ${err}`);
+    }
+  }
+
+  static async update(data: UserType): Promise<UserType> {
+    try {
+      const conn = await Client.connect();
+      const sql = `UPDATE users SET first_name = $1, last_name = $2 WHERE id = $3 RETURNING *`;
+      const result = await conn.query(sql, [
+        data.first_name,
+        data.last_name,
+        data.id,
+      ]);
+      conn.release();
+
+      return result.rows[0];
     } catch (err) {
       throw new Error(`Cannot find user ${err}`);
     }
