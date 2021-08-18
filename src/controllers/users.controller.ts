@@ -31,6 +31,7 @@ router.get(
 
 router.post(
   '/',
+  authenticate,
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       if (req.body === {}) {
@@ -116,6 +117,7 @@ router.post(
 
 router.get(
   '/:id',
+  authenticate,
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id);
@@ -129,6 +131,7 @@ router.get(
 
 router.patch(
   '/:id',
+  authenticate,
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id);
@@ -155,6 +158,7 @@ router.patch(
 
 router.delete(
   '/:id',
+  authenticate,
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id);
