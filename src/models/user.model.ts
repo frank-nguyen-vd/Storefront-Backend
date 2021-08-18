@@ -60,6 +60,20 @@ export class User {
     }
   }
 
+  static async findById(id: number): Promise<UserType[]> {
+    try {
+      const conn = await Client.connect();
+      const sql = `SELECT * FROM users WHERE id=${id}`;
+
+      const result = await conn.query(sql);
+      conn.release();
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Cannot find user ${err}`);
+    }
+  }
+
   static async findOne(data: UserType): Promise<UserType> {
     try {
       const result = await this.find(data);
