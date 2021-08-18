@@ -96,4 +96,17 @@ export class Product {
       throw new Error(`Cannot update product. Error: ${err}`);
     }
   }
+
+  static async deleteById(id: number): Promise<ProductType> {
+    try {
+      const conn = await Client.connect();
+      const sql = `DELETE FROM products WHERE id = ${id} RETURNING *`;
+      const result = await conn.query(sql);
+      conn.release();
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Cannot delete product. Error: ${err}`);
+    }
+  }
 }
