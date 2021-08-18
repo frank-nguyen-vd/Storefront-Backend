@@ -2,9 +2,9 @@ import Client from '../database';
 
 export interface ProductType {
   id?: number;
-  name: string;
-  price: number;
-  category: string;
+  name?: string;
+  price?: number;
+  category?: string;
 }
 
 export class Product {
@@ -31,6 +31,27 @@ export class Product {
       return result.rows[0];
     } catch (err) {
       throw new Error(`Cannot create product ${err}`);
+    }
+  }
+
+  static async find(data: ProductType): Promise<ProductType[]> {
+    try {
+      const conn = await Client.connect();
+      const { id, name, price, category } = data;
+      let conditions = '';
+      if (id) conditions += `id = ${id},`;
+      if (name) conditions += `name = '${name}',`;
+      if (price) conditions += `last_name = '${price}',`;
+      if (category) conditions += `username = '${category}',`;
+      if (conditions.slice(-1) === ',') conditions = conditions.slice(0, -1);
+      const sql = `SELECT * FROM users WHERE ${conditions}`;
+
+      const result = await conn.query(sql);
+      conn.release();
+
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Cannot find product. Error: ${err}`);
     }
   }
 }
