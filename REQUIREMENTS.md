@@ -6,19 +6,174 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 
-#### Products
+### Users
 
-- Index
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
+#### GET /api/users/login
 
-#### Users
+**Description**  
+To retrieve access token by providing username and password
+
+**Request**
+
+```json
+{
+  "username": "redfox",
+  "password": "abc123"
+}
+```
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJlZGZveCIsImlhdCI6MTYyOTI4NDgyOSwiZXhwIjoxNjI5Mjg2NjI5fQ.vXwuwd9Lks8WooM7OUMeGdOWtwZRVpj0FCxJIxjwzbw"
+}
+```
+
+#### GET /api/users
+
+**Description**  
+To retrieve the list of all users' profile
+
+**Request**
+
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": 1,
+      "first_name": "Arcadia",
+      "last_name": "Oak",
+      "username": "redfox",
+      "password": "$2b$10$wX7wCnHdSIKIrlKncj/kFu0e9HtgeuqhLg8d1yInCKeknxMbdCxeO"
+    },
+    {...}.
+    {...}
+  ]
+}
+```
+
+#### GET /api/users/\<id\>
+
+**Description**  
+To retrieve an user profile given the user id
+
+**Request**
+
+- `<id>` is the id of an user, for example, GET /api/users/1
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "first_name": "Arcadia",
+    "last_name": "Oak",
+    "username": "redfox",
+    "password": "$2b$10$wX7wCnHdSIKIrlKncj/kFu0e9HtgeuqhLg8d1yInCKeknxMbdCxeO"
+  }
+}
+```
+
+#### POST /api/users
+
+**Description**  
+To create a new user account. The details of the newly created account will be returned
+
+**Request**
+
+- `<id>` is the id of an user, for example, GET /api/users/1
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "first_name": "Arcadia",
+    "last_name": "Oak",
+    "username": "redfox",
+    "password": "$2b$10$VpLH.xCI6qPbrl5r9de5hexDsShwHeL4Va28HvWmkemwlWTMmVlRK"
+  }
+}
+```
+
+#### DELETE /api/users/\<id\>
+
+**Description**  
+To delete a user account given user id. The details of the deleted account will be returned
+
+**Request**
+
+- `<id>` is the id of an user, for example, PATCH /api/users/1
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "first_name": "Green",
+    "last_name": "Woods",
+    "username": "redfox",
+    "password": "$2b$10$VpLH.xCI6qPbrl5r9de5hexDsShwHeL4Va28HvWmkemwlWTMmVlRK"
+  }
+}
+```
+
+#### PATCH /api/users/\<id\>
+
+**Description**  
+To update a user account given user id. Only fields `first_name` and `last_name` can be updated
+
+**Request**
+
+- `<id>` is the id of an user, for example, PATCH /api/users/1
+- Authorization token
+- Json body
+
+```json
+{
+  "first_name": "Green",
+  "last_name": "Woods"
+}
+```
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "first_name": "Green",
+    "last_name": "Woods",
+    "username": "redfox",
+    "password": "$2b$10$VpLH.xCI6qPbrl5r9de5hexDsShwHeL4Va28HvWmkemwlWTMmVlRK"
+  }
+}
+```
+
+### Products
 
 - Index [token required]
 - Show [token required]
 - Create N[token required]
+- [OPTIONAL] Top 5 most popular products
+- [OPTIONAL] Products by category (args: product category)
 
 #### Orders
 
