@@ -180,9 +180,9 @@ To update a user account given user id. Only fields `first_name` and `last_name`
 - Current Order by user (args: user id)[token required]
 - [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
-## Data Shapes
+## Database Tables
 
-#### Product
+#### products
 
 | Column   | Data Type    |
 | -------- | ------------ |
@@ -191,7 +191,7 @@ To update a user account given user id. Only fields `first_name` and `last_name`
 | price    | REAL         |
 | category | VARCHAR(250) |
 
-#### User
+#### users
 
 | Column     | Data Type    |
 | ---------- | ------------ |
@@ -200,7 +200,7 @@ To update a user account given user id. Only fields `first_name` and `last_name`
 | last_name  | VARCHAR(50)  |
 | password   | VARCHAR(250) |
 
-#### Order
+#### orders
 
 | Column       | Data Type |
 | ------------ | --------- |

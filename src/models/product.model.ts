@@ -69,15 +69,15 @@ export class Product {
     }
   }
 
-  static async findByCategory(category: string): Promise<ProductType> {
+  static async findByCategory(category: string): Promise<ProductType[]> {
     try {
       const conn = await Client.connect();
-      const sql = `SELECT * FROM products WHERE category=${category} ORDER BY id ASC`;
+      const sql = `SELECT * FROM products WHERE category='${category}' ORDER BY id ASC`;
 
       const result = await conn.query(sql);
       conn.release();
 
-      return result.rows[0];
+      return result.rows;
     } catch (err) {
       throw new Error(`Cannot find product by category. Error: ${err}`);
     }
