@@ -91,7 +91,6 @@ To create a new user account. The details of the newly created account will be r
 
 **Request**
 
-- `<id>` is the id of an user, for example, GET /api/users/1
 - Authorization token
 
 **Response**
@@ -169,11 +168,193 @@ To update a user account given user id. Only fields `first_name` and `last_name`
 
 ### Products
 
-- Index [token required]
-- Show [token required]
-- Create N[token required]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
+#### GET /api/products
+
+**Description**  
+To retrieve the list of all products' detail
+
+**Request**
+
+- None
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": [
+      {
+          "id": 1,
+          "name": "Iphone 12",
+          "price": 1350.5,
+          "category": "Smart Devices"
+      },
+      {...},
+      {...}
+  ]
+}
+```
+
+#### GET /api/products?category=\<category_name\>
+
+**Description**  
+To retrieve the list of all products' detail under a defined category
+
+**Request**
+
+- If `<category_name>` is not defined, return empty list,  
+  else return all products under the defined category
+
+  for example, GET /api/products?category=Household
+
+**Response**
+
+```json
+{
+    "statusCode": 200,
+    "data": [
+        {
+            "id": 1,
+            "name": "Chair",
+            "price": 1350.5,
+            "category": "Household"
+        },
+        {...},
+        {...}
+    ]
+}
+```
+
+#### GET /api/products?popular&limit=\<number_of_items\>
+
+**Description**  
+To retrieve the list of top sale products
+
+**Request**
+
+- If `limit` or `<number_of_items>` is not defined, return top 5 products,  
+  else return `<number_of_items>` products
+
+  for example, GET /api/products/?popular&limit=1
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": 1,
+      "name": "Chair",
+      "price": 135.5,
+      "category": "Household"
+    }
+  ]
+}
+```
+
+#### GET /api/products/\<id\>
+
+**Description**  
+To retrieve an product detail given the product id
+
+**Request**
+
+- `<id>` is the id of a product, for example, GET /api/products/1
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "name": "Iphone 12",
+    "price": 1350.5,
+    "category": "Smart Devices"
+  }
+}
+```
+
+#### POST /api/products
+
+**Description**  
+To create a new product. The details of the newly created product will be returned
+
+**Request**
+
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "name": "Tiffany Chair",
+    "price": 129.99,
+    "category": "Household"
+  }
+}
+```
+
+#### DELETE /api/products/\<id\>
+
+**Description**  
+To delete a product given its id. The details of the deleted product will be returned
+
+**Request**
+
+- `<id>` is the id of the product, for example, DELETE /api/products/1
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "name": "Tiffany Chair",
+    "price": 129.99,
+    "category": "Household"
+  }
+}
+```
+
+#### PATCH /api/products/\<id\>
+
+**Description**  
+To update a product details given its id.
+
+**Request**
+
+- `<id>` is the id of the product, for example, PATCH /api/products/1
+- Authorization token
+- Json body
+
+```json
+{
+  "name": "Chair",
+  "price": "450.0",
+  "category": "Household"
+}
+```
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "id": 1,
+    "name": "Chair",
+    "price": "450.0",
+    "category": "Household"
+  }
+}
+```
 
 #### Orders
 
