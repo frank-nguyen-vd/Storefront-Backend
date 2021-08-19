@@ -12,7 +12,7 @@ export class User {
   static async index(): Promise<UserType[]> {
     try {
       const conn = await Client.connect();
-      const sql = 'SELECT * FROM users';
+      const sql = 'SELECT * FROM users ORDER BY id ASC';
       const result = await conn.query(sql);
       conn.release();
       return result.rows;
@@ -49,7 +49,7 @@ export class User {
       if (first_name) conditions += `first_name = '${first_name}'`;
       if (last_name) conditions += `last_name = '${last_name}'`;
       if (username) conditions += `username = '${username}'`;
-      const sql = `SELECT * FROM users WHERE ${conditions}`;
+      const sql = `SELECT * FROM users WHERE ${conditions}  ORDER BY id ASC`;
 
       const result = await conn.query(sql);
       conn.release();
@@ -63,7 +63,7 @@ export class User {
   static async findById(id: number): Promise<UserType> {
     try {
       const conn = await Client.connect();
-      const sql = `SELECT * FROM users WHERE id=${id}`;
+      const sql = `SELECT * FROM users WHERE id=${id}  ORDER BY id ASC`;
 
       const result = await conn.query(sql);
       conn.release();
