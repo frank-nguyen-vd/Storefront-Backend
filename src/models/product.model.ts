@@ -58,7 +58,21 @@ export class Product {
   static async findById(id: number): Promise<ProductType> {
     try {
       const conn = await Client.connect();
-      const sql = `SELECT * FROM products WHERE id=${id}`;
+      const sql = `SELECT * FROM products WHERE id=${id} ORDER BY id ASC`;
+
+      const result = await conn.query(sql);
+      conn.release();
+
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Cannot find product by id. Error: ${err}`);
+    }
+  }
+
+  static async findByCategory(category: string): Promise<ProductType> {
+    try {
+      const conn = await Client.connect();
+      const sql = `SELECT * FROM products WHERE category=${category} ORDER BY id ASC`;
 
       const result = await conn.query(sql);
       conn.release();
