@@ -1,10 +1,11 @@
 import express from 'express';
 import { Product } from '../models/product.model';
+import { authenticate } from '../services/authentication.service';
 import {
   createErrMsg,
   createSuccessMsg,
 } from '../services/response-template.service';
-
+import _ from 'lodash';
 const router = express.Router();
 
 router.get(
@@ -13,7 +14,19 @@ router.get(
     req: express.Request,
     res: express.Response,
   ): Promise<express.Response | undefined> => {
-    const results = await Product.index();
+    let results: unknown[] = [];
+
+    if (_.isEmpty(req.query)) {
+      results = await Product.index();
+      return res.status(200).json({
+        statusCode: 200,
+        data: results,
+      });
+    } else if (req.query.category) {
+      results = await Product.findByCategory(
+        req.query.category as unknown as string,
+      );
+    }
     return res.status(200).json({
       statusCode: 200,
       data: results,
