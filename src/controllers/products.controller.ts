@@ -79,4 +79,18 @@ router.get(
   },
 );
 
+router.delete(
+  '/:id',
+  authenticate,
+  async (req: express.Request, res: express.Response): Promise<void> => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = await Product.deleteById(id);
+      res.status(200).send(createSuccessMsg(200, result));
+    } catch {
+      res.status(500).send(createErrMsg(500, 'Internal Server Error'));
+    }
+  },
+);
+
 export default router;
