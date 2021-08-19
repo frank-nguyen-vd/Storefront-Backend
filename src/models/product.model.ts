@@ -85,6 +85,9 @@ export class Product {
 
   static async findPopular(limit: number): Promise<ProductType[]> {
     try {
+      if (isNaN(limit)) {
+        limit = 5;
+      }
       const conn = await Client.connect();
       const sql = `SELECT * FROM products WHERE id in (SELECT product_id FROM orders GROUP BY product_id ORDER BY COUNT(*) DESC LIMIT ${limit})`;
 

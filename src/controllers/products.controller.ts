@@ -14,23 +14,26 @@ router.get(
     req: express.Request,
     res: express.Response,
   ): Promise<express.Response | undefined> => {
-    let results: unknown[] = [];
+    try {
+      let results: unknown[] = [];
 
-    if (_.isEmpty(req.query)) {
-      results = await Product.index();
+      if (_.isEmpty(req.query)) {
+        results = await Product.index();
+      } else if (req.query.category) {
+        results = await Product.findByCategory(
+          req.query.category as unknown as string,
+        );
+      } else if ('popular' in req.query) {
+        const limit = parseInt(req.params.limit);
+        results = await Product.findPopular(limit);
+      }
       return res.status(200).json({
         statusCode: 200,
         data: results,
       });
-    } else if (req.query.category) {
-      results = await Product.findByCategory(
-        req.query.category as unknown as string,
-      );
+    } catch (err) {
+      res.status(500).send(createErrMsg(500, 'Internal Server Error'));
     }
-    return res.status(200).json({
-      statusCode: 200,
-      data: results,
-    });
   },
 );
 
@@ -65,7 +68,6 @@ router.post(
 
 router.get(
   '/:id',
-
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const id = parseInt(req.params.id);
