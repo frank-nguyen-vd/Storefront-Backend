@@ -45,10 +45,11 @@ export class User {
       const conn = await Client.connect();
       const { id, first_name, last_name, username } = data;
       let conditions = '';
-      if (id) conditions += `id = ${id}`;
-      if (first_name) conditions += `first_name = '${first_name}'`;
-      if (last_name) conditions += `last_name = '${last_name}'`;
-      if (username) conditions += `username = '${username}'`;
+      if (id) conditions += `id = ${id},`;
+      if (first_name) conditions += `name = '${first_name}',`;
+      if (last_name) conditions += `last_name = '${last_name}',`;
+      if (username) conditions += `username = '${username}',`;
+      if (conditions.slice(-1) === ',') conditions = conditions.slice(0, -1);
       const sql = `SELECT * FROM users WHERE ${conditions}  ORDER BY id ASC`;
 
       const result = await conn.query(sql);
