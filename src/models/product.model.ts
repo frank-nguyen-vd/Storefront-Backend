@@ -11,7 +11,7 @@ export class Product {
   static async index(): Promise<ProductType[]> {
     try {
       const conn = await Client.connect();
-      const sql = 'SELECT * FROM products';
+      const sql = 'SELECT * FROM products  ORDER BY id ASC';
       const result = await conn.query(sql);
       conn.release();
       return result.rows;
@@ -44,7 +44,7 @@ export class Product {
       if (price) conditions += `last_name = '${price}',`;
       if (category) conditions += `username = '${category}',`;
       if (conditions.slice(-1) === ',') conditions = conditions.slice(0, -1);
-      const sql = `SELECT * FROM products WHERE ${conditions}`;
+      const sql = `SELECT * FROM products WHERE ${conditions}  ORDER BY id ASC`;
 
       const result = await conn.query(sql);
       conn.release();
@@ -79,7 +79,21 @@ export class Product {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Cannot find product. Error: ${err}`);
+      throw new Error(`Cannot find product by category. Error: ${err}`);
+    }
+  }
+
+  static async findPopular(limit: number): Promise<ProductType[]> {
+    try {
+      const conn = await Client.connect();
+      const sql = `SELECT * FROM products WHERE id in (SELECT product_id FROM orders GROUP BY product_id ORDER BY COUNT(*) DESC LIMIT ${limit})`;
+
+      const result = await conn.query(sql);
+      conn.release();
+
+      return result.rows;
+    } catch (err) {
+      throw new Error(`Cannot find popular product. Error: ${err}`);
     }
   }
 
