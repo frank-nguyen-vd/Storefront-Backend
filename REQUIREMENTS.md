@@ -358,8 +358,99 @@ To update a product details given its id.
 
 #### Orders
 
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+#### GET /api/orders
+
+**Description**  
+To retrieve the list of all orders
+
+**Request**
+
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": 1,
+      "qty": 1,
+      "product_id": 1,
+      "user_id": 1,
+      "is_completed": false,
+    },
+    {...},
+    {...}
+  ]
+}
+```
+
+#### GET /api/orders/\<id\>
+
+**Description**  
+To retrieve an order given id
+
+**Request**
+
+- `<id>` is the id of an order, for example GET /api/orders/1
+- Authorization token
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": 1,
+      "qty": 1,
+      "product_id": 1,
+      "user_id": 1,
+      "is_completed": false,
+    },
+    {...},
+    {...}
+  ]
+}
+```
+
+#### POST /api/orders
+
+**Description**  
+To create a new order
+
+**Request**
+
+- Authorization token
+- json body
+
+```json
+{
+  "product_id": 1,
+  "user_id": 1,
+  "qty": 1
+}
+```
+
+**Response**
+
+```json
+{
+  "statusCode": 200,
+  "data": [
+    {
+      "id": 1,
+      "qty": 1,
+      "product_id": 1,
+      "user_id": 1,
+      "is_completed": false,
+    },
+    {...},
+    {...}
+  ]
+}
+```
 
 ## Database Tables
 
