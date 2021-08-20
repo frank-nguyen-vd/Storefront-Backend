@@ -16,7 +16,6 @@ services:
     networks:
       - app-network
   api:
-    restart: always
     build:
       context: .
       dockerfile: api.Dockerfile
