@@ -1,4 +1,4 @@
-from postgres
+from postgres:13
 
 WORKDIR /app
 
