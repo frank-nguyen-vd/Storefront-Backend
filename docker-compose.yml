@@ -1,8 +1,7 @@
 version: '3.3'
 
 services:
-  postgres:
-    image: postgres
+  db:
     restart: always
     build:
       context: .
@@ -16,6 +15,15 @@ services:
     container_name: db_0
     networks:
       - app-network
+  api:
+    restart: always
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+    container_name: api_0
+    ports:
+      - '5000:5000'
+    entrypoint: bash api-init.sh
 
 networks:
   app-network:

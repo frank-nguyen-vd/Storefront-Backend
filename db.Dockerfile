@@ -1,9 +1,4 @@
-from postgres:13
+FROM postgres:13
 
-WORKDIR /app
+COPY ./db-init.sql /docker-entrypoint-initdb.d/db-init.sql
 
-RUN apt-get update -y && apt-get install sudo -y
-
-COPY db.entrypoint.sh .
-
-CMD ["/bin/bash", "db.entrypoint.sh"]
