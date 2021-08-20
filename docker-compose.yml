@@ -3,6 +3,7 @@ version: '3.3'
 services:
   postgres:
     image: postgres
+    restart: always
     build:
       context: .
       dockerfile: db.Dockerfile
