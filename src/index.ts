@@ -5,7 +5,7 @@ import productsController from './controllers/products.controller';
 import usersController from './controllers/users.controller';
 import ordersController from './controllers/orders.controller';
 
-const app = express();
+export const app = express();
 export default app;
 
 const port = 5000;
