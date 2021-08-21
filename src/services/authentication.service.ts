@@ -10,6 +10,7 @@ export const authenticate = (
 ): void => {
   try {
     const authHeader = req.headers.authorization;
+
     if (authHeader === undefined) {
       res.status(401).send(createErrMsg(401, 'Missing authorization header'));
       return;

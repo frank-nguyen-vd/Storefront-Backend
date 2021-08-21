@@ -11,7 +11,9 @@ const req = supertest(app);
 
 let token: string;
 
-describe('Testing Endpoints', () => {
+let userId: number;
+
+describe('Endpoints', () => {
   beforeAll(async () => {
     const res = await req.post('/api/users/login').send({
       username: secret_user,
@@ -30,8 +32,35 @@ describe('Testing Endpoints', () => {
           username: 'redfox',
           password: 'abc123',
         })
-        .set('Authorization', 'Bearer' + token);
+        .set('Authorization', 'Bearer ' + token);
+
+      expect(res.status).toBe(200);
+      userId = res.body.data.id;
+    });
+    it('Can log in', async () => {
+      const res = await req.post('/api/users/login').send({
+        username: 'redfox',
+        password: 'abc123',
+      });
+
       expect(res.status).toBe(200);
     });
+    it('Can get a list of users', async () => {
+      const res = await req
+        .get('/api/users')
+        .set('Authorization', 'Bearer ' + token);
+      expect(res.status).toBe(200);
+    });
+    it('Can get an user by id', async () => {
+      const res = await req
+        .get(`/api/users/${userId}`)
+        .set('Authorization', 'Bearer ' + token);
+      expect(res.status).toBe(200);
+    });
+  });
+  afterAll(async () => {
+    await req
+      .delete(`/api/users/${userId}`)
+      .set('Authorization', 'Bearer ' + token);
   });
 });

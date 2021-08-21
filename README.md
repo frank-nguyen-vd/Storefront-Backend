@@ -18,7 +18,9 @@ SECRET_PASS=secret
 
 ### STEP 3
 
-Start postgresql service by `docker-compose up -d`
+Start database postgresql service by `docker-compose up -d`
+
+Database runs on port 5432
 
 ### Step 4
 
@@ -30,6 +32,12 @@ Set up database by `npx db-migrate up`
 
 ### Step 6
 
+Run tests by `npm run test`
+
+### Step 7
+
 Running Web API by `npm start`
+
+Web API runs on port 5000
 
 List of APIs are described in [here](REQUIREMENTS.md)

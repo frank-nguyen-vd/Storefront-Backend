@@ -84,7 +84,6 @@ router.post(
 
 router.post(
   '/login',
-
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       const { username, password } = req.body;
