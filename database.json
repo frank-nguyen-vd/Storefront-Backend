@@ -5,5 +5,13 @@
     "database": "storefront",
     "user": "postgres",
     "password": "postgres"
+  },
+
+  "prod": {
+    "driver": "pg",
+    "host": "db",
+    "database": "storefront",
+    "user": "postgres",
+    "password": "postgres"
   }
 }

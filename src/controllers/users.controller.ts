@@ -31,7 +31,6 @@ router.get(
 
 router.post(
   '/',
-  authenticate,
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       if (req.body === {}) {
