@@ -55,6 +55,10 @@ export class Product {
     }
   }
 
+  static async show(id: number): Promise<ProductType> {
+    return this.findById(id);
+  }
+
   static async findById(id: number): Promise<ProductType> {
     try {
       const conn = await Client.connect();

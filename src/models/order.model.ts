@@ -62,6 +62,10 @@ export class Order {
     }
   }
 
+  static async show(id: number): Promise<OrderType> {
+    return this.findById(id);
+  }
+
   static async findById(id: number): Promise<OrderType> {
     try {
       const conn = await Client.connect();

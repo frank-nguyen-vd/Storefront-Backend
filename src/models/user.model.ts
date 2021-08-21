@@ -61,6 +61,10 @@ export class User {
     }
   }
 
+  static async show(id: number): Promise<UserType> {
+    return this.findById(id);
+  }
+
   static async findById(id: number): Promise<UserType> {
     try {
       const conn = await Client.connect();
