@@ -4,11 +4,10 @@
   "description": "Storefront-Backend",
   "main": "src/index.js",
   "scripts": {
-    "jasmine": "jasmine",
     "build": "npx tsc",
     "prettier": "prettier --write .",
     "lint": "eslint src/**/*.ts --fix",
-    "test": "npm run build && npm run jasmine",
+    "test": "npm run build && npx jasmine",
     "prod": "node dist/src/index.js",
     "start": "nodemon src/index.ts"
   },

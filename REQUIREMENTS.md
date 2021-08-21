@@ -92,6 +92,16 @@ To create a new user account. The details of the newly created account will be r
 **Request**
 
 - Authorization token
+- json body
+
+```json
+{
+  "first_name": "Arcadia",
+  "last_name": "Oak",
+  "username": "redfox1",
+  "password": "abc123"
+}
+```
 
 **Response**
 
