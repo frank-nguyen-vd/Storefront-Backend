@@ -294,6 +294,15 @@ To create a new product. The details of the newly created product will be return
 **Request**
 
 - Authorization token
+- Json body
+
+```json
+{
+  "name": "Tiffany Chair",
+  "price": 129.99,
+  "category": "Household"
+}
+```
 
 **Response**
 
@@ -448,17 +457,13 @@ To create a new order
 ```json
 {
   "statusCode": 200,
-  "data": [
-    {
-      "id": 1,
-      "qty": 1,
-      "product_id": 1,
-      "user_id": 1,
-      "is_completed": false,
-    },
-    {...},
-    {...}
-  ]
+  "data": {
+    "id": 1,
+    "qty": 1,
+    "product_id": 1,
+    "user_id": 1,
+    "is_completed": false
+  }
 }
 ```
 
