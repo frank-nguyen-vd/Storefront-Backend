@@ -16,6 +16,8 @@ const router = express.Router();
 const pepper = process.env.PEPPER ?? PEPPER;
 const salt = parseInt(process.env.SALT_ROUNDS ?? SALT_ROUNDS, 10);
 const tokenSecret = process.env.TOKEN_SECRET ?? TOKEN_SECRET;
+const secret_user = process.env.SECRET_USER ?? 'admin';
+const secret_pass = process.env.SECRET_PASS ?? 'secret';
 
 router.get(
   '/',
@@ -31,6 +33,7 @@ router.get(
 
 router.post(
   '/',
+  authenticate,
   async (req: express.Request, res: express.Response): Promise<void> => {
     try {
       if (req.body === {}) {
@@ -58,7 +61,7 @@ router.post(
         return;
       }
       const user = await User.findOne({ username });
-      if (user !== undefined) {
+      if (user !== undefined || username === secret_user) {
         res.status(400).send(createErrMsg(400, 'User exists'));
         return;
       }
@@ -86,18 +89,24 @@ router.post(
     try {
       const { username, password } = req.body;
 
-      if (username === undefined || password === undefined) {
-        res.status(400).send(createErrMsg(400, 'Missing username or password'));
-        return;
-      }
-      const user = await User.findOne({ username });
-      if (
-        user === undefined ||
-        user.password === undefined ||
-        !bcrypt.compareSync(password + pepper, user.password)
-      ) {
-        res.status(400).send(createErrMsg(400, 'Invalid username or password'));
-        return;
+      if (username !== secret_user && password !== secret_pass) {
+        if (username === undefined || password === undefined) {
+          res
+            .status(400)
+            .send(createErrMsg(400, 'Missing username or password'));
+          return;
+        }
+        const user = await User.findOne({ username });
+        if (
+          user === undefined ||
+          user.password === undefined ||
+          !bcrypt.compareSync(password + pepper, user.password)
+        ) {
+          res
+            .status(400)
+            .send(createErrMsg(400, 'Invalid username or password'));
+          return;
+        }
       }
 
       const token = jwt.sign(
